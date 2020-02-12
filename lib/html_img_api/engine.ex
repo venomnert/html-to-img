@@ -20,7 +20,7 @@ defmodule HtmlImgApi.Engine do
     end
 
     Logger.info("Logging this text!")
-    Logger.debug("Var value: #{inspect(File.exists?(@tmp_html))}")
+    Logger.info("Var value: #{inspect(File.exists?(@tmp_html))}")
 
     base_img =
       (@tmp <> "/*.png")
