@@ -1,14 +1,15 @@
 defmodule HtmlImgApi.Engine do
   require Logger
 
-  @root Application.app_dir(:html_img_api)
-  @tmp_html Path.join(@root, "tmp_input.html")
+  # @root Application.app_dir(:html_img_api)
+  @tmp "/tmp"
+  @tmp_html Path.join(@tmp, "tmp_input.html")
 
   def conv_html_img(html) do
     @tmp_html
     |> File.write!(html, [:write])
     |> case do
-      :ok -> Porcelain.shell("wkhtmltoimage #{@tmp_html} #{@root}/#{DateTime.utc_now() |> DateTime.to_unix()}.png")
+      :ok -> Porcelain.shell("wkhtmltoimage #{@tmp_html} #{@tmp}/#{DateTime.utc_now() |> DateTime.to_unix()}.png")
       _ -> {:error, "error creating tmp html file"}
     end
 
@@ -17,7 +18,7 @@ defmodule HtmlImgApi.Engine do
 
 
     base_img =
-      (@root <> "/*.png")
+      (@tmp <> "/*.png")
       |> Path.wildcard()
       |> IO.inspect(label: "LIST")
       |> List.first()
@@ -31,7 +32,7 @@ defmodule HtmlImgApi.Engine do
   defp delete_temp_files() do
     File.rm!(@tmp_html)
 
-    (@root <> "/*.png")
+    (@tmp <> "/*.png")
     |> Path.wildcard()
     |> List.first()
     |> case do
