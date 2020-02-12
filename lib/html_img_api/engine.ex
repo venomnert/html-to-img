@@ -1,4 +1,6 @@
 defmodule HtmlImgApi.Engine do
+  require Logger
+
   @root File.cwd!()
   @tmp_html Path.join(@root, "./tmp_input.html")
 
@@ -6,7 +8,8 @@ defmodule HtmlImgApi.Engine do
     @tmp_html
     |> File.write!(html, [:write])
 
-    IO.inspect(File.exists?(@tmp_html), label: "EXISTS")
+    Logger.info("Logging this text!")
+    Logger.debug("Var value: #{inspect(@tmp_html)}")
 
     Porcelain.shell("wkhtmltoimage #{@tmp_html} #{DateTime.utc_now() |> DateTime.to_unix()}.png")
 
