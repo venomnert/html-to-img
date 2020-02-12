@@ -1,0 +1,20 @@
+APP="html_img_api" 
+
+BUILD_HOST="64.225.12.192"
+BUILD_USER="deploy"
+BUILD_AT="/home/deploy/html_img_api/builds"
+
+PRODUCTION_HOSTS="64.225.12.192"
+PRODUCTION_USER="deploy"
+DELIVER_TO="/home/deploy/html_img_api"
+
+post_extract_release_archive() {
+  status "Removing release version start_erl.data file"
+  __sync_remote "
+    [ -f ~/.profile ] && source ~/.profile
+    set -e
+    if [ -f /home/deploy/deploy_example/deploy_example/var/start_erl.data ]; then
+      rm /home/deploy/deploy_example/deploy_example/var/start_erl.data
+    fi
+  "
+}
