@@ -3,7 +3,9 @@ defmodule HtmlImgApi.Engine do
 
   # @root Application.app_dir(:html_img_api)
   @tmp "/tmp"
-  @tmp_html Path.join(@tmp, "tmp_input.html")
+  # @tmp_html Path.join(@tmp, "tmp_input.html")
+  @tmp_html "/tmp/tmp_input.html"
+
 
   def conv_html_img(html) do
     @tmp_html
