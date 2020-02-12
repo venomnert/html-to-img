@@ -8,7 +8,7 @@ defmodule HtmlImgApi.Engine do
     @tmp_html
     |> File.write!(html, [:write])
     |> case do
-      :ok -> Porcelain.shell("wkhtmltoimage #{@tmp_html} #{@root}/#{DateTime.utc_now() |> DateTime.to_unix()}.png")
+      :ok -> Porcelain.shell("wkhtmltoimage #{"<h1>hello</h1>"} #{@root}/#{DateTime.utc_now() |> DateTime.to_unix()}.png")
       _ -> {:error, "error creating tmp html file"}
     end
 
