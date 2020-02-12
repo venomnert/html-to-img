@@ -8,7 +8,7 @@ defmodule HtmlImgApi.Engine do
     |> File.write!(html, [:write])
 
     Porcelain.shell(
-      "wkhtmltoimage #{@tmp_html} #{@tmp_img_path}#{DateTime.utc_now() |> DateTime.to_unix()}.png"
+      "sudo wkhtmltoimage #{@tmp_html} #{@tmp_img_path}#{DateTime.utc_now() |> DateTime.to_unix()}.png"
     )
 
     base_img =
