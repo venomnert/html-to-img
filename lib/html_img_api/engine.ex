@@ -1,7 +1,6 @@
 defmodule HtmlImgApi.Engine do
-  @tmp File.cwd!()
-  @tmp_html "./tmp_input.html"
-  @tmp_img_path "./tmp_imgs/"
+  @root File.cwd!()
+  @tmp_html Path.join(@root, "./tmp_input.html")
 
   def conv_html_img(html) do
     @tmp_html
@@ -9,25 +8,25 @@ defmodule HtmlImgApi.Engine do
 
     IO.inspect(File.exists?(@tmp_html), label: "EXISTS")
 
-    Porcelain.shell(
-      "sudo wkhtmltoimage #{@tmp_html} #{@tmp_img_path}#{DateTime.utc_now() |> DateTime.to_unix()}.png"
-    )
+    Porcelain.shell("wkhtmltoimage #{@tmp_html} #{DateTime.utc_now() |> DateTime.to_unix()}.png")
 
     base_img =
-      (@tmp_img_path <> "*.png")
+      (@root <> "/*.png")
+      |> IO.inspect(label: "PATHING")
       |> Path.wildcard()
+      |> IO.inspect(label: "LIST")
       |> List.first()
       |> File.read!()
       |> :base64.encode()
 
-    # delete_temp_files()
+    delete_temp_files()
     {:ok, base_img}
   end
 
   defp delete_temp_files() do
     File.rm!(@tmp_html)
 
-    (@tmp_img_path <> "*.png")
+    (@root <> "/*.png")
     |> Path.wildcard()
     |> List.first()
     |> case do
