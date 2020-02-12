@@ -1,21 +1,22 @@
 defmodule HtmlImgApi.Engine do
   require Logger
 
-  @root File.cwd!()
-  @tmp_html Path.join(@root, "./tmp_input.html")
+  @root Application.app_dir(:html_img_api)
+  @tmp_html Path.join(@root, "tmp_input.html")
 
   def conv_html_img(html) do
     @tmp_html
     |> File.write!(html, [:write])
 
     Logger.info("Logging this text!")
-    Logger.debug("Var value: #{inspect(@tmp_html)}")
+    Logger.debug("Var value: #{inspect(File.exists?(@tmp_html))}")
 
-    Porcelain.shell("wkhtmltoimage #{@tmp_html} #{DateTime.utc_now() |> DateTime.to_unix()}.png")
+    Porcelain.shell(
+      "wkhtmltoimage #{@tmp_html} #{@root}/#{DateTime.utc_now() |> DateTime.to_unix()}.png"
+    )
 
     base_img =
       (@root <> "/*.png")
-      |> IO.inspect(label: "PATHING")
       |> Path.wildcard()
       |> IO.inspect(label: "LIST")
       |> List.first()
