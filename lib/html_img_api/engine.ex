@@ -7,6 +7,8 @@ defmodule HtmlImgApi.Engine do
     @tmp_html
     |> File.write!(html, [:write])
 
+    IO.inspect(File.exists?(@tmp_html), label: "EXISTS")
+
     Porcelain.shell(
       "sudo wkhtmltoimage #{@tmp_html} #{@tmp_img_path}#{DateTime.utc_now() |> DateTime.to_unix()}.png"
     )
