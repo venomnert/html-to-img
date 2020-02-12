@@ -18,7 +18,7 @@ defmodule HtmlImgApi.Engine do
       |> File.read!()
       |> :base64.encode()
 
-    delete_temp_files()
+    # delete_temp_files()
     {:ok, base_img}
   end
 
