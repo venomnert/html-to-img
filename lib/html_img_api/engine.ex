@@ -7,13 +7,15 @@ defmodule HtmlImgApi.Engine do
   def conv_html_img(html) do
     @tmp_html
     |> File.write!(html, [:write])
+    |> case do
+      :ok -> Porcelain.shell("wkhtmltoimage #{@tmp_html} #{@root}/#{DateTime.utc_now() |> DateTime.to_unix()}.png")
+      _ -> {:error, "error creating tmp html file"}
+    end
 
     Logger.info("Logging this text!")
     Logger.debug("Var value: #{inspect(File.exists?(@tmp_html))}")
 
-    Porcelain.shell(
-      "wkhtmltoimage #{@tmp_html} #{@root}/#{DateTime.utc_now() |> DateTime.to_unix()}.png"
-    )
+
 
     base_img =
       (@root <> "/*.png")
