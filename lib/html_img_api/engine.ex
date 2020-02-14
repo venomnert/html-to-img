@@ -11,7 +11,9 @@ defmodule HtmlImgApi.Engine do
     |> File.write!(html)
     |> case do
       :ok ->
-        Porcelain.shell("wkhtmltoimage #{@tmp_html} /tmp/#{DateTime.utc_now() |> DateTime.to_unix()}.png")
+        Porcelain.shell(
+          "wkhtmltoimage --width 400 #{@tmp_html} /tmp/#{DateTime.utc_now() |> DateTime.to_unix()}.jpg"
+        )
 
       _ ->
         {:error, "error creating tmp html file"}
@@ -21,21 +23,21 @@ defmodule HtmlImgApi.Engine do
     IO.inspect(File.exists?(@tmp_html), label: "FILE VALUE")
 
     base_img =
-      (@tmp <> "/*.png")
+      (@tmp <> "/*.jpg")
       |> Path.wildcard()
       |> IO.inspect(label: "LIST")
       |> List.first()
       |> File.read!()
       |> :base64.encode()
 
-    delete_temp_files()
+    # delete_temp_files()
     {:ok, base_img}
   end
 
   defp delete_temp_files() do
     File.rm!(@tmp_html)
 
-    (@tmp <> "/*.png")
+    (@tmp <> "/*.jpg")
     |> Path.wildcard()
     |> List.first()
     |> case do
